@@ -2,7 +2,6 @@ import { type Prisma } from "@prisma/client";
 import { type inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 import {
-  type createTRPCContext,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -58,6 +57,10 @@ export const profileRouter = createTRPCRouter({
         });
         addedFollow = false;
       }
+
+      void ctx.revalidateSSG?.(`/profiles/${userId}`);
+      void ctx.revalidateSSG?.(`/profiles/${currentUserId}`);
+
       return { addedFollow };
     }),
 });

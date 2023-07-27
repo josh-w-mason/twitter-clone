@@ -1,5 +1,4 @@
 import Link from "next/link";
-import next from "next/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ProfileImage } from "./ProfileImage";
 import { useSession } from "next-auth/react";
@@ -138,6 +137,7 @@ function TweetCard({
           likedByMe={likedByMe}
           likeCount={likeCount}
         />
+        {/* <DeleteButton /> */}
       </div>
     </li>
   );
