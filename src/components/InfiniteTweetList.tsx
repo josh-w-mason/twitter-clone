@@ -6,6 +6,8 @@ import { VscHeart, VscHeartFilled } from "react-icons/vsc";
 import { IconHoverEffect } from "./IconHoverEffect";
 import { api } from "~/utils/api";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { HiX } from "react-icons/hi";
+import { trpc } from "/utils/trpc";
 
 type Tweet = {
   id: string;
@@ -112,6 +114,8 @@ function TweetCard({
     toggleLike.mutate({ id });
   }
 
+  const { mutate: deleteItem } = trpc.useMutation([]);
+
   return (
     <li className="flex gap-4 border-b px-4 py-4">
       <Link href={`/profiles/${user.id}`}>
@@ -129,6 +133,7 @@ function TweetCard({
           <span className="text-gray-500">
             {dateTimeFormatter.format(createdAt)}
           </span>
+          <HiX className="text-lg text-red-500" />
         </div>
         <p className="whitespace-pre-wrap">{content}</p>
         <HeartButton
@@ -137,7 +142,6 @@ function TweetCard({
           likedByMe={likedByMe}
           likeCount={likeCount}
         />
-        {/* <DeleteButton /> */}
       </div>
     </li>
   );

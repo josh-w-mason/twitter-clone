@@ -58,6 +58,7 @@ export const tweetRouter = createTRPCRouter({
         });
       }
     ),
+
   create: protectedProcedure
     .input(z.object({ content: z.string() }))
     .mutation(async ({ input: { content }, ctx }) => {
@@ -69,6 +70,21 @@ export const tweetRouter = createTRPCRouter({
 
       return tweet;
     }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input: { id }, ctx }) => {
+      // Logic for deleting a tweet
+      // You can use ctx.prisma to interact with your database and delete the tweet with the given id.
+
+      // Sample code (replace with your actual logic):
+      const deletedTweet = await ctx.prisma.tweet.delete({
+        where: { id },
+      });
+
+      return deletedTweet;
+    }),
+
   toggleLike: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input: { id }, ctx }) => {
@@ -137,3 +153,5 @@ async function getInfiniteTweets({
     nextCursor,
   };
 }
+
+// Delete Tweet

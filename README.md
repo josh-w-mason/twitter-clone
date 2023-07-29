@@ -25,4 +25,24 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 
 ## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/
+deployment/docker) for more information.
+
+<!-- Notes for Reuben:
+
+This project was really quite an overall deep dive. I feel like tRPC is the biggest new feature that I'm still trying to wrap my head around.
+
+I've finished the youtube tutorial, but as a way to really test my knowledge, now I'm gonna go back and add more features. First starting with a delete button. This will have a few
+parts:
+
+- on the front end, displaying a little "X" in the top right hand corner of the tweet card
+- some functionality to do with on click. It must trigger a function that sends a DELETE request to the api. Essentially it finds that tweet in the Db (by ID?), then removes it. Then we want to auto refresh the page so that is seemlessly disappears.
+
+I thought it would be fun to make it a non protected procedure at first to keep it simple - anyone can delete anyone else's tweet without having to be logged in. Starting on the backend.
+
+Would I need to edit the code in "tweet.ts" in the routers folder to start with?
+
+Chur!! -->
+
+<!-- Shortcut to open up Prisma studio from terminal = npx prisma studio -->
+
