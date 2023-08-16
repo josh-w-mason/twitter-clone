@@ -46,3 +46,4 @@ Chur!! -->
 
 <!-- Shortcut to open up Prisma studio from terminal = npx prisma studio -->
 
+<!-- 16 August - you can click the X and delete anyone's tweets which is funny. But need auto refresh. Then restrict it so that the X will ONLY appear on tweets where sessionUSER id matches tweetUserID -->

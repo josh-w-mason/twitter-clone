@@ -7,7 +7,7 @@ import { IconHoverEffect } from "./IconHoverEffect";
 import { api } from "~/utils/api";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { HiX } from "react-icons/hi";
-import { trpc } from "/utils/trpc";
+import { type MouseEvent } from "react";
 
 type Tweet = {
   id: string;
@@ -98,6 +98,7 @@ function TweetCard({
           }),
         };
       };
+
       trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData);
       trpcUtils.tweet.infiniteFeed.setInfiniteData(
         { onlyFollowing: true },
@@ -110,11 +111,19 @@ function TweetCard({
     },
   });
 
+  const deleteTweet = api.tweet.deleteTweet.useMutation({
+    onSuccess: ({ success }) => {
+      console.log("API success??");
+    },
+  });
+
+  function handleDeleteTweet() {
+    deleteTweet.mutate({ id });
+  }
+
   function handleToggleLike() {
     toggleLike.mutate({ id });
   }
-
-  const { mutate: deleteItem } = trpc.useMutation([]);
 
   return (
     <li className="flex gap-4 border-b px-4 py-4">
@@ -133,7 +142,10 @@ function TweetCard({
           <span className="text-gray-500">
             {dateTimeFormatter.format(createdAt)}
           </span>
-          <HiX className="text-lg text-red-500" />
+          <HiX
+            className="text-lg text-red-500 hover:underline"
+            onClick={handleDeleteTweet}
+          />
         </div>
         <p className="whitespace-pre-wrap">{content}</p>
         <HeartButton
