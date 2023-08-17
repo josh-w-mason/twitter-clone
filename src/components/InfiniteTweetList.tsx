@@ -125,6 +125,9 @@ function TweetCard({
     toggleLike.mutate({ id });
   }
 
+  const session = useSession();
+  const isCurrentUserTweet = session.data?.user.id === user.id;
+
   return (
     <li className="flex gap-4 border-b px-4 py-4">
       <Link href={`/profiles/${user.id}`}>
@@ -142,10 +145,12 @@ function TweetCard({
           <span className="text-gray-500">
             {dateTimeFormatter.format(createdAt)}
           </span>
-          <HiX
-            className="text-lg text-red-500 hover:underline"
-            onClick={handleDeleteTweet}
-          />
+          {isCurrentUserTweet && (
+            <HiX
+              className="text-lg text-red-500 hover:underline"
+              onClick={handleDeleteTweet}
+            />
+          )}
         </div>
         <p className="whitespace-pre-wrap">{content}</p>
         <HeartButton
