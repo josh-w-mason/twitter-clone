@@ -116,10 +116,11 @@ function TweetCard({
   const deleteTweet = api.tweet.deleteTweet.useMutation({
     onSuccess: ({ success }) => {
       console.log("API success??");
-
-      // trpcUtils.tweet.infiniteFeed.setInfiniteData({}, undefined);
     },
   });
+
+  //////
+  /////
 
   function handleDeleteTweet() {
     deleteTweet.mutate(
@@ -157,6 +158,27 @@ function TweetCard({
       }
     );
   }
+
+  // NOTES::
+
+  // deleteTweet.mutate({ id }, { ... }): Here, you're using the deleteTweet mutation with the mutate function. You're passing the id of the tweet to be deleted. The second parameter is an object that holds the onSuccess handler.
+
+  // onSuccess: ({ success }) => { ... }: This is the success handler for the deleteTweet mutation. When the deletion is successful, the success parameter will be true, and this block of code will execute.
+
+  // const updateData: ...: This line declares a function named updateData, which will be used to modify the old data to reflect the deletion. The updateData function has a specific type inferred based on the setInfiniteData function of trpcUtils.tweet.infiniteFeed.
+
+  // if (oldData == null) return;: This check ensures that you only proceed if there's valid data to work with. If the oldData is null (which should not happen), the function returns immediately.
+
+  // Mapping through pages and tweets: The updateData function maps through the pages in the old data and then, within each page, it maps through the tweets. It uses the filter function to remove the tweet with the id that matches the deleted tweet's id.
+
+  // trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData);: This line updates the main feed by calling setInfiniteData from trpcUtils.tweet.infiniteFeed. It provides an empty object as the first argument to indicate that no filters are applied, and then it uses the updateData function to modify the old data.
+
+  // Similarly, the next two lines update the feeds that are filtered by following status and user ID, respectively.
+
+  // The goal of this code is to ensure that when a tweet is deleted, the affected feeds are updated accordingly by removing the deleted tweet from the data, all while utilizing trpc's provided functions to manage your data updates. This way, your UI will automatically reflect the changes, and you don't need to manually manipulate React state for these updates.
+
+  /////
+  ///////
 
   function handleToggleLike() {
     toggleLike.mutate({ id });
