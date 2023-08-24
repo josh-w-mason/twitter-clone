@@ -42,18 +42,21 @@ export function InfiniteTweetList({
   }
 
   return (
-    <ul>
-      <InfiniteScroll
-        dataLength={tweets.length}
-        next={fetchNewTweets}
-        hasMore={hasMore}
-        loader={<LoadingSpinner />}
-      >
-        {tweets.map((tweet) => {
-          return <TweetCard key={tweet.id} {...tweet} />;
-        })}
-      </InfiniteScroll>
-    </ul>
+    <>
+      <ul>
+        <InfiniteScroll
+          dataLength={tweets.length}
+          next={fetchNewTweets}
+          hasMore={hasMore}
+          loader={<LoadingSpinner />}
+        >
+          {tweets.map((tweet) => {
+            return <TweetCard key={tweet.id} {...tweet} />;
+          })}
+        </InfiniteScroll>
+      </ul>
+      {console.log("INFINITE TWEET LIST GENERATED")}
+    </>
   );
 }
 
@@ -98,7 +101,6 @@ function TweetCard({
           }),
         };
       };
-
       trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData);
       trpcUtils.tweet.infiniteFeed.setInfiniteData(
         { onlyFollowing: true },
@@ -114,11 +116,46 @@ function TweetCard({
   const deleteTweet = api.tweet.deleteTweet.useMutation({
     onSuccess: ({ success }) => {
       console.log("API success??");
+
+      // trpcUtils.tweet.infiniteFeed.setInfiniteData({}, undefined);
     },
   });
 
   function handleDeleteTweet() {
-    deleteTweet.mutate({ id });
+    deleteTweet.mutate(
+      { id },
+      {
+        onSuccess: ({ success }) => {
+          if (success) {
+            const updateData: Parameters<
+              typeof trpcUtils.tweet.infiniteFeed.setInfiniteData
+            >[1] = (oldData) => {
+              if (oldData == null) return;
+
+              return {
+                ...oldData,
+                pages: oldData.pages.map((page) => {
+                  return {
+                    ...page,
+                    tweets: page.tweets.filter((tweet) => tweet.id !== id),
+                  };
+                }),
+              };
+            };
+
+            trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData);
+            trpcUtils.tweet.infiniteFeed.setInfiniteData(
+              { onlyFollowing: true },
+              updateData
+            );
+            trpcUtils.tweet.infiniteProfileFeed.setInfiniteData(
+              { userId: user.id },
+              updateData
+            );
+          }
+        },
+      }
+    );
   }
 
   function handleToggleLike() {
@@ -147,7 +184,7 @@ function TweetCard({
           </span>
           {isCurrentUserTweet && (
             <HiX
-              className="text-lg text-red-500 hover:underline"
+              className="cursor-pointer text-lg text-red-500"
               onClick={handleDeleteTweet}
             />
           )}
