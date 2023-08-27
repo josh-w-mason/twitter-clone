@@ -178,7 +178,7 @@ function TweetCard({
   // The goal of this code is to ensure that when a tweet is deleted, the affected feeds are updated accordingly by removing the deleted tweet from the data, all while utilizing trpc's provided functions to manage your data updates. This way, your UI will automatically reflect the changes, and you don't need to manually manipulate React state for these updates.
 
   /////
-  ///////
+  ////////
 
   function handleToggleLike() {
     toggleLike.mutate({ id });
